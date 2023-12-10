@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Typography, Avatar, Container, Stack } from '@mui/material';
+import {
+  Button,
+  Typography,
+  Avatar,
+  Container,
+  Stack,
+  Grid,
+  Card,
+  CardContent,
+  IconButton,
+} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -13,7 +24,7 @@ const Home = () => {
   const handleLogout = () => {
     axios.get(`http://localhost:8000/logout`)
       .then(() => {
-       navigate('/login');
+        navigate('/login');
       })
       .catch(err => console.log(err));
   };
@@ -35,27 +46,33 @@ const Home = () => {
   }, []); 
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md" sx={{ mt: 5 }}>
       {auth ? (
-        <Stack spacing={3} alignItems="center" mt={5}>
-          <Avatar>{name.charAt(0)}</Avatar>
-          <Typography variant="h5">Welcome, {name}</Typography>
-          <Button
-            variant="contained"
-            endIcon={<LogoutIcon />}
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
-        </Stack>
+        <Card>
+          <CardContent>
+            <Stack spacing={3} alignItems="center">
+              <Avatar sx={{ width: 80, height: 80 }}>{name.charAt(0)}</Avatar>
+              <Typography variant="h5">Welcome, {name}</Typography>
+              <IconButton onClick={handleLogout} color="primary">
+                <LogoutIcon fontSize="large" />
+              </IconButton>
+            </Stack>
+          </CardContent>
+        </Card>
       ) : (
-        <Stack spacing={3} alignItems="center" mt={5}>
-          <Typography variant="h5" color="error">{message}</Typography>
-          <Typography variant="h5">Login Now</Typography>
-          <Link to="/login">
-            <Button variant="contained">Login</Button>
-          </Link>
-        </Stack>
+        <Card>
+          <CardContent>
+            <Stack spacing={3} alignItems="center">
+              <Typography variant="h5" color="error">{message}</Typography>
+              <Typography variant="h5">Login Now</Typography>
+              <Link to="/login">
+                <Button variant="contained" startIcon={<PersonIcon />}>
+                  Login
+                </Button>
+              </Link>
+            </Stack>
+          </CardContent>
+        </Card>
       )}
     </Container>
   );
